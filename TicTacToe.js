@@ -10,6 +10,12 @@ function disableElm(domElm) {
     }
 }
 
+function enableElm(domElm) {
+    if(domElm != '' && domElm !== 'undefined') {
+        domElm.disabled = false;
+    }
+}
+
 var board = (function(){
     var tiles = [3];
 
@@ -18,12 +24,17 @@ var board = (function(){
     }
 }());
 
-var game = (function(){
+var game = (function() {
     var players = [];
+    var makers = ['x', 'o'];
+    var gameDataElm = '';
 
     return {
         board: board,
-        addPlayer : function(domElm, playerName){
+        initialize : function(dataElm) {
+            gameDataElm = dataElm;
+        },
+        addPlayer : function(domElm, playerName) {
             players.push(
                 {
                     name: playerName
@@ -33,9 +44,22 @@ var game = (function(){
             if(playerName != '' && playerName !== 'undefined') {
                 disableElm(domElm);
             }
+
+            if(players.length == 2) {
+                this.startGame();
+            }
         },        
-        getPlayers : function(){
+        getPlayers : function() {
             return players;
+        },
+        startGame : function() {
+            document.getElementById(gameDataElm).setAttribute('data-currentUser', players[0].name);            
+        },
+        placeMarker : function(x, y, marker) {
+            //check if available
+
+            //place marker
+            //lock tile
         }
     }
 }());
