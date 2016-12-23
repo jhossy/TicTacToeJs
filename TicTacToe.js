@@ -4,16 +4,22 @@ function cl(message) {
     console.log(message);
 }
 
-function disableElm(domElm) {
-    if(domElm != '' && domElm !== 'undefined') {
-        domElm.disabled = true;
+function disableElm(elmId) {
+    if(elmId != '' && elmId !== 'undefined') {
+        //domElm.disabled = true;
+        document.getElementById(elmId).setAttribute('disabled', true);
     }
 }
 
-function enableElm(domElm) {
-    if(domElm != '' && domElm !== 'undefined') {
-        domElm.disabled = false;
+function enableElm(elmId) {
+    if(elmId != '' && elmId !== 'undefined') {
+        //domElm.disabled = false;
+        document.getElementById(elmId).setAttribute('disabled', true);
     }
+}
+
+function updateElm(domElm, value) {
+    document.getElementById(domElm).setAttribute('value', value);
 }
 
 var board = (function(){
@@ -27,35 +33,41 @@ var board = (function(){
 var game = (function() {
     var players = [];
     var makers = ['x', 'o'];
-    var gameDataElm = '';
-
+    var currentPlayer = '';
+    
     return {
         board: board,
-        initialize : function(dataElm) {
-            gameDataElm = dataElm;
+        initialize : function() {
+            
         },
-        addPlayer : function(domElm, playerName) {
+        addPlayer : function(domElm, playerName, statusElm) {
             players.push(
                 {
                     name: playerName
                 }
             );
 
+            updateElm(statusElm, '' + playerName + ' was added to the game');
+
             if(playerName != '' && playerName !== 'undefined') {
                 disableElm(domElm);
-            }
-
-            if(players.length == 2) {
-                this.startGame();
             }
         },        
         getPlayers : function() {
             return players;
         },
-        startGame : function() {
-            document.getElementById(gameDataElm).setAttribute('data-currentUser', players[0].name);            
+        startGame : function(btnElm, statusElm) {
+            if(players.length == 2){
+                disableElm(btnElm);
+                this.currentPlayer = players[0].name;
+                cl(statusElm);
+                updateElm(statusElm, 'Game started!');
+            }
+            else{
+                updateElm(statusElm, 'Requires two players to start!');
+            }        
         },
-        placeMarker : function(x, y, marker) {
+        placeMarker : function(x, y) {
             //check if available
 
             //place marker

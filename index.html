@@ -4,18 +4,22 @@
     <script type="text/javascript" src="TicTacToe.js"></script>    
 </head>
 <body>
-    <div id="gameData" data-currentUser='d'>
-        <input type="text" id="player1" />
-        <button onClick="game.addPlayer(this, document.getElementById('player1').value)">Add player1</button>
-    </div>
-
     <div>
-        <input type="text" id="player2" />
-        <button onClick="game.addPlayer(this, document.getElementById('player2').value)">Add player2</button>
+        <input type="text" id="player1Name" />
+        <button id="btnAddPlayer1" onClick="game.addPlayer('btnAddPlayer1', document.getElementById('player1Name').value, 'statusText')">Add player1</button>
+    </div>    
+    <div>
+        <input type="text" id="player2Name" />
+        <button id="btnAddPlayer2" onClick="game.addPlayer('btnAddPlayer2', document.getElementById('player2Name').value, 'statusText')">Add player2</button>
     </div>
+    <div>
+        <button id="btnStartGame" onClick="game.startGame('btnStartGame', 'statusText')">Start game!</button>
+    </div>
+    <div>
+        <input type="text" id="statusText" disabled/>
     <table border="solid 1 px">
         <tr>
-            <td onClick="game.placeMarker(1, 1, document.getElementById('gameData').getAttribute('data-currentUser'))">1.1</td>
+            <td onClick="game.placeMarker(1, 1)">1.1</td>
             <td>1.2</td>
             <td>1.3</td>
         </tr>
@@ -30,8 +34,5 @@
             <td>3.3</td>
         </tr>
     </table>
-    <script type="text/javascript">        
-        game.initialize('gameData');
-    </script>
 </body>
 </html>
