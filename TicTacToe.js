@@ -18,17 +18,13 @@ function enableElm(elmId) {
     }
 }
 
-function updateElm(domElm, value) {
+function updateElmValue(domElm, value) {
     document.getElementById(domElm).setAttribute('value', value);
 }
 
-// var board = (function(){
-//     var tiles = [3];
-
-//     return {
-//         tiles: tiles
-//     }
-// }());
+function updateElmHtml(domElm, value) {
+    document.getElementById(domElm).innerHTML = value;
+}
 
 var game = (function() {
     var players = [];
@@ -44,7 +40,7 @@ var game = (function() {
                 }
             );
 
-            updateElm(statusElm, '' + playerName + ' was added to the game');
+            updateElmValue(statusElm, '' + playerName + ' was added to the game');
 
             if(playerName != '' && playerName !== 'undefined') {
                 disableElm(domElm);
@@ -60,32 +56,53 @@ var game = (function() {
         getCurrentPlayer : function() {
             return currentPlayer;
         },  
+        getCurrentMarker : function() {
+            if(players[0].name == currentPlayer) {
+                return players[0].marker;
+            }
+            return players[1].marker;
+        },
         getBoard : function() {
             return board;
         },      
         getPlayers : function() {
             return players;
         },
+        initializeBoard: function() {
+            board[0] = ['','',''];
+            board[1] = ['','',''];
+            board[2] = ['','',''];
+        },
         startGame : function(btnElm, statusElm) {
             if(players.length == 2){
                 disableElm(btnElm);
                 currentPlayer = players[0].name;
-                updateElm(statusElm, 'Game started!');
+                this.initializeBoard();
+                updateElmValue(statusElm, 'Game started!');
             }
             else{
-                updateElm(statusElm, 'Requires two players to start!');
+                updateElmValue(statusElm, 'Requires two players to start!');
             }        
         },
-        placeMarker : function(x, y, statusElm) {
+        placeMarker : function(x, y, statusElm, elmToUpdate) {
             //check if available
-            // if(board.tiles[x][y] != '') {
-            //     updateElm(statusElm, 'Tile is occupied');
-            // }
-            //if(board)
-            //place marker
-            //board.push({'x' : x, 'y': y, 'marker' : 'X'});
+            if(board[x][y] !== '') {
+                //write to status field
+                updateElmValue(statusElm, 'Tile is occupied');
+                return;
+            }
+            
+            var markerToPlace = this.getCurrentMarker();
+            board[x][y] = '' +  markerToPlace;
 
-            //lock tile
+            //visually update the board
+            updateElmHtml(elmToUpdate, markerToPlace);
+
+            //switch player turn
+            this.changeTurn();
+
+            //update status element
+            updateElmValue(statusElm, currentPlayer + '\'s turn');
         }
     }
 }());
